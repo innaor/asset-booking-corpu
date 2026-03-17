@@ -1,0 +1,229 @@
+/* ========== GLOBAL RESET ========== */
+a {
+    text-decoration: underline;
+}
+
+/* Hilangkan underline khusus button link */
+a.btn,
+a.btn-primary,
+a.btn-success,
+a.btn-secondary {
+    text-decoration: none !important;
+    color: white;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #ffffff;
+    color: #2c3e50;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ========== CARD STYLE ========== */
+.card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+    text-decoration: none;   /* tambahkan ini */
+    display: inline-block;   /* supaya proper button */
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: #2696a2;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1f7f89;
+}
+
+/* Danger Button */
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    opacity: 0.9;
+}
+
+/* Success */
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Warning */
+.btn-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+/* ========== FORM STYLE ========== */
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d1e7ea;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #2696a2;
+}
+
+/* ========== TABLE STYLE ========== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th {
+    background: #e6f4f6;
+    padding: 10px;
+    text-align: left;
+}
+
+table td {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+
+/* ========== NAVBAR ========== */
+
+.navbar {
+    background-color: #2696a2;
+    padding: 15px 0;
+}
+
+.nav-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.logout {
+    color: #ffdddd;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        margin-top: 10px;
+    }
+
+    .nav-links a {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
+/* Success Button */
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    opacity: 0.9;
+}
+
+/* Secondary / Grey Button */
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    opacity: 0.9;
+}
+
+/* Badge Status */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-draft {
+    background-color: #f0f0f0;
+    color: #6c757d;
+}
+
+label {
+    margin-top: 10px;
+}
+
+input, select {
+    box-sizing: border-box;
+}

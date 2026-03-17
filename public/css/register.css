@@ -1,0 +1,16 @@
+.auth-card {
+    max-width: 450px;
+    margin: 80px auto;
+    padding: 40px;
+}
+
+.auth-title {
+    text-align: center;
+    color: #2696a2;
+    margin-bottom: 30px;
+}
+
+/* Supaya form tidak mepet */
+.auth-card form {
+    margin-top: 10px;
+}
