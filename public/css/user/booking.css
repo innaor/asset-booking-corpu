@@ -1,0 +1,75 @@
+.booking-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.booking-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.booking-table th,
+.booking-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.booking-table th {
+    background-color: #f5f5f5;
+}
+
+.status {
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+}
+
+.status.pending {
+    background-color: orange;
+}
+
+.status.approved {
+    background-color: #3498db;
+}
+
+.status.ongoing {
+    background-color: #2ecc71;
+}
+
+.status.completed {
+    background-color: gray;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-disabled {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-edit {
+    background-color: #3498db;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+}
+
+.btn-disabled {
+    background-color: #bdbdbd;
+    cursor: not-allowed;
+}

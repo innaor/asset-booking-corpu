@@ -24,4 +24,11 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->call(function () {
+            (new \App\Http\Controllers\BookingController)->autoUpdateStatus();
+        })->everyMinute();
+    }
 }

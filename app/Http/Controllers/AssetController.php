@@ -14,7 +14,7 @@ class AssetController extends Controller
     {
         $assets = Asset::with('subcategory.category')->get();
         $categories = Category::all();
-        $subcategories = Subcategory::all(); // 🔥 TAMBAH INI
+        $subcategories = Subcategory::all(); //  TAMBAH INI
 
         return view('admin.assets.index', compact('assets', 'categories', 'subcategories'));
     }
@@ -56,4 +56,20 @@ class AssetController extends Controller
 
         return back();
     }
+
+    public function storeSubcategory(Request $request)
+    {
+        $request->validate([
+            'category_id' => 'required',
+            'subcategory_name' => 'required'
+        ]);
+
+        Subcategory::create([
+            'category_id' => $request->category_id,
+            'subcategory_name' => $request->subcategory_name
+        ]);
+
+        return back()->with('success', 'Subkategori berhasil ditambahkan');
+    }
+
 }
