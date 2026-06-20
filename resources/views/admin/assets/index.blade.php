@@ -17,7 +17,7 @@
         </button>
         <button class="btn btn-outline-primary" id="btnOpenSubModal">
             <i class="bi bi-diagram-3"></i>
-            Tambah Subkategori
+            Tambah Jenis
         </button>
     </div>
 </div>
@@ -38,7 +38,7 @@
                 <tr>
                     <th>Nama Aset</th>
                     <th>Kategori</th>
-                    <th>Subkategori</th>
+                    <th>Jenis Aset</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -142,9 +142,9 @@
             </div>
 
             <div class="form-group">
-                <label for="subcategory_aset">Subkategori</label>
+                <label for="subcategory_aset">Jenis</label>
                 <select name="subcategory_id" id="subcategory_aset" required>
-                    <option value="">— Pilih Subkategori —</option>
+                    <option value="">— Pilih Jenis Aset —</option>
                 </select>
             </div>
 
@@ -174,9 +174,9 @@
             <div>
                 <h2 class="modal-title" id="modalSubTitle">
                     <i class="bi bi-diagram-3" style="color:var(--color-primary-400);"></i>
-                    Tambah Subkategori
+                    Tambah Jenis Aset
                 </h2>
-                <p class="modal-subtitle">Tambahkan subkategori untuk pengelompokan aset</p>
+                <p class="modal-subtitle">Tambahkan Jenis Aset untuk pengelompokan aset</p>
             </div>
             <button class="modal-close" id="btnCloseSubModal" aria-label="Tutup">
                 <i class="bi bi-x-lg"></i>
@@ -199,7 +199,7 @@
             </div>
 
             <div class="form-group">
-                <label for="subcategory_name">Nama Subkategori</label>
+                <label for="subcategory_name">Jenis Aset</label>
                 <input type="text" name="subcategory_name" id="subcategory_name"
                        placeholder="Contoh: Laptop"
                        required>
@@ -208,7 +208,7 @@
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-check-circle"></i>
-                    Simpan Subkategori
+                    Simpan Jenis Aset
                 </button>
                 <button type="button" class="btn btn-secondary" id="btnCancelSubModal">
                     <i class="bi bi-x-circle"></i>
