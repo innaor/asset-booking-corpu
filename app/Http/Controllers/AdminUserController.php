@@ -31,4 +31,28 @@ class AdminUserController extends Controller
 
         return back()->with('success', 'Password berhasil diubah.');
     }
+
+    //impersonate
+    public function impersonate(Request $request, $id)
+    {
+        $request->validate([
+            'reason' => 'required|min:5'
+        ]);
+
+        $user = User::findOrFail($id);
+
+        // pengamanan
+        if ($user->role !== 'internal') {
+            return back()->with('error', 'User tidak dapat diimpersonate.');
+        }
+
+        session([
+            'impersonator'       => auth()->id(),
+            'impersonate_reason' => $request->reason,
+        ]);
+
+        auth()->login($user);
+
+        return redirect('/user/dashboard');
+    }
 }

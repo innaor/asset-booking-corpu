@@ -69,6 +69,13 @@ Route::middleware(['admin'])->group(function () {
         [AdminUserController::class, 'changePassword']
     )->name('admin.users.change-password');
 
+
+    //route impersonate
+    Route::post(
+        '/admin/users/{id}/impersonate',
+        [AdminUserController::class, 'impersonate']
+    )->name('admin.users.impersonate');
+
 });
 
 
