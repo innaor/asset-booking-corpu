@@ -57,6 +57,12 @@
                 User Management
             </a>
 
+            <a href="/admin/activity-log"
+                class="sidebar-link {{ request()->is('admin/activity-log*') ? 'active' : '' }}">
+                <i class="bi bi-clock-history"></i>
+                Activity Log
+            </a>
+
             <div class="sidebar-divider"></div>
 
             <a href="/logout" class="sidebar-link logout">

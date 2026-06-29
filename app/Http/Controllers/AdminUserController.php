@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\ActivityLog;
 
 class AdminUserController extends Controller
 {
@@ -27,6 +28,13 @@ class AdminUserController extends Controller
 
         $user->update([
             'password' => Hash::make($request->password)
+        ]);
+
+        ActivityLog::create([
+            'admin_id'       => auth()->id(),
+            'target_user_id' => $user->id,
+            'action'         => 'change_password',
+            'description'    => 'Mengubah password akun "' . $user->name . '".'
         ]);
 
         return back()->with('success', 'Password berhasil diubah.');
@@ -53,6 +61,17 @@ class AdminUserController extends Controller
 
         auth()->login($user);
 
+        ActivityLog::create([
+            'admin_id'       => auth()->id(),
+            'target_user_id' => $user->id,
+            'action'         => 'impersonate',
+            'description'    => 'Melakukan impersonate ke akun "' .
+                                $user->name .
+                                '". Alasan: ' .
+                                $request->reason
+        ]);
+
         return redirect('/user/dashboard');
     }
+    
 }

@@ -1,0 +1,30 @@
+/* Badge Action */
+
+.action-badge{
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:500;
+}
+
+.badge-password{
+    background:#FEF3C7;
+    color:#92400E;
+}
+
+.badge-impersonate{
+    background:#DBEAFE;
+    color:#1D4ED8;
+}
+
+/* Lebar kolom */
+
+.description-column{
+    min-width:420px;
+}
+
+.date-column{
+    white-space:nowrap;
+    width:220px;
+}

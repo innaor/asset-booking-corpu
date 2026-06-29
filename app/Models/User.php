@@ -45,4 +45,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class, 'admin_id');
+    }
 }

@@ -9,6 +9,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\ActivityLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,10 @@ Route::middleware(['admin'])->group(function () {
         '/admin/users/{id}/impersonate',
         [AdminUserController::class, 'impersonate']
     )->name('admin.users.impersonate');
+
+
+    //route activity log
+    Route::get('/admin/activity-log', [ActivityLogController::class, 'index']);
 
 });
 

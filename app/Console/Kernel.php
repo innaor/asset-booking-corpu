@@ -12,6 +12,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // Update status booking otomatis setiap menit
+        $schedule->call(function () {
+            (new \App\Http\Controllers\BookingController)->autoUpdateStatus();
+        })->everyMinute();
+
+        // Contoh bawaan Laravel (tidak dipakai)
         // $schedule->command('inspire')->hourly();
     }
 
@@ -23,12 +29,5 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
-    }
-
-    protected function schedule(Schedule $schedule)
-    {
-        $schedule->call(function () {
-            (new \App\Http\Controllers\BookingController)->autoUpdateStatus();
-        })->everyMinute();
     }
 }
