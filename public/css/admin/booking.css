@@ -1,0 +1,348 @@
+/* ======================================================
+   STATUS BOOKING DROPDOWN
+   ====================================================== */
+
+.booking-status{
+    display:inline-flex;
+    align-items:center;
+    border-radius:999px;
+    overflow:hidden;
+    position:relative;
+}
+
+.booking-status-select{
+
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+
+    min-width:145px;
+
+    padding:8px 38px 8px 14px;
+
+    border:none !important;
+    outline:none !important;
+
+    border-radius:999px !important;
+
+    font-size:13px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    margin:0 !important;
+    box-shadow:none !important;
+
+    transition:.2s;
+}
+
+.booking-status-select option{
+    background:#ffffff;
+    color:#374151;
+    font-weight:500;
+}
+
+.booking-status::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:14px;
+    top:50%;
+
+    width:7px;
+    height:7px;
+
+    border-right:2px solid currentColor;
+    border-bottom:2px solid currentColor;
+
+    transform:translateY(-60%) rotate(45deg);
+
+    pointer-events:none;
+}
+
+/* Pending */
+
+.booking-status-pending .booking-status-select{
+
+    background:#FEF3C7;
+    color:#B45309;
+}
+
+.booking-status-pending::after{
+    color:#B45309;
+}
+
+/* Approved */
+
+.booking-status-approved .booking-status-select{
+
+    background:#D1FAE5;
+    color:#065F46;
+}
+
+.booking-status-approved::after{
+    color:#065F46;
+}
+
+/* Rejected */
+
+.booking-status-rejected .booking-status-select{
+
+    background:#FEE2E2;
+    color:#991B1B;
+}
+
+.booking-status-rejected::after{
+    color:#991B1B;
+}
+
+/* Ongoing */
+
+.booking-status-ongoing .booking-status-select{
+
+    background:#DBEAFE;
+    color:#1D4ED8;
+}
+
+.booking-status-ongoing::after{
+    color:#1D4ED8;
+}
+
+/* Completed */
+
+.booking-status-completed .booking-status-select{
+
+    background:#E5E7EB;
+    color:#374151;
+}
+
+.booking-status-completed::after{
+    color:#374151;
+}
+
+/* Cancelled */
+
+.booking-status-cancelled .booking-status-select{
+
+    background:#FEE2E2;
+    color:#991B1B;
+}
+
+.booking-status-cancelled::after{
+    color:#991B1B;
+}
+
+/* =====================================
+   FILTER BOOKING
+===================================== */
+
+.booking-filter-tabs{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    margin-bottom:18px;
+
+    flex-wrap:wrap;
+}
+
+.filter-tab{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:9px 16px;
+
+    border:1px solid #dbe5ea;
+
+    border-radius:999px;
+
+    background:#ffffff;
+
+    color:#4b5563;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    transition:.25s;
+
+    font-family:var(--font-family);
+}
+
+.filter-tab i{
+
+    font-size:15px;
+}
+
+.filter-tab:hover{
+
+    background:#f7fbfc;
+    border-color:var(--color-primary-200);
+    color:var(--color-primary-600);
+}
+
+.filter-tab.active{
+
+    background:var(--color-primary-400);
+
+    color:#ffffff;
+
+    border-color:var(--color-primary-400);
+
+    box-shadow:0 4px 12px rgba(38,150,162,.18);
+}
+
+.tab-count{
+
+    min-width:22px;
+    height:22px;
+
+    border-radius:999px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:12px;
+    font-weight:600;
+
+    background:rgba(255,255,255,.22);
+
+    color:inherit;
+}
+
+.filter-tab:not(.active) .tab-count{
+
+    background:#eef2f7;
+    color:#6b7280;
+}
+
+
+/* ===================================
+   BOOKING TOOLBAR
+=================================== */
+
+.booking-toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+.booking-date-filter{
+
+    position:relative;
+
+}
+
+.booking-filter-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:10px 16px;
+
+    border:1px solid #dbe5ea;
+
+    border-radius:999px;
+
+    background:#ffffff;
+
+    cursor:pointer;
+
+    font-family:var(--font-family);
+
+    font-size:14px;
+
+    transition:.2s;
+
+}
+
+.booking-filter-btn:hover{
+
+    border-color:var(--color-primary-400);
+
+}
+
+.booking-filter-dropdown{
+
+    position:absolute;
+
+    top:110%;
+
+    right:0;
+
+    width:220px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    overflow:hidden;
+
+    display:none;
+
+    z-index:999;
+
+}
+
+.booking-filter-dropdown.show{
+
+    display:block;
+
+}
+
+.booking-filter-dropdown button{
+
+    width:100%;
+
+    padding:12px 16px;
+
+    background:white;
+
+    border:none;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    font-size:14px;
+
+}
+
+.booking-filter-dropdown button:hover{
+
+    background:#f5f6f7;
+
+}
+
+.booking-filter-dropdown hr{
+
+    border:none;
+
+    border-top:1px solid #ececec;
+
+}

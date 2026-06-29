@@ -47,22 +47,21 @@ class AdminUserController extends Controller
             'reason' => 'required|min:5'
         ]);
 
+        $adminId = auth()->id();
+
         $user = User::findOrFail($id);
 
-        // pengamanan
         if ($user->role !== 'internal') {
             return back()->with('error', 'User tidak dapat diimpersonate.');
         }
 
         session([
-            'impersonator'       => auth()->id(),
+            'impersonator'       => $adminId,
             'impersonate_reason' => $request->reason,
         ]);
 
-        auth()->login($user);
-
         ActivityLog::create([
-            'admin_id'       => auth()->id(),
+            'admin_id'       => $adminId,
             'target_user_id' => $user->id,
             'action'         => 'impersonate',
             'description'    => 'Melakukan impersonate ke akun "' .
@@ -71,7 +70,9 @@ class AdminUserController extends Controller
                                 $request->reason
         ]);
 
+        auth()->login($user);
+
         return redirect('/user/dashboard');
-    }
+}
     
 }
