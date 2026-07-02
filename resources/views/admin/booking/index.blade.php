@@ -57,53 +57,70 @@
         </button>
     </div>
 
-    <div class="booking-date-filter">
-        <button
-            type="button"
-            class="booking-filter-btn"
-            onclick="toggleBookingFilter()">
-            <i class="bi bi-calendar3"></i>
-            <span id="bookingFilterLabel">
-                Filter
-            </span>
-            <i class="bi bi-chevron-down"></i>
-        </button>
+    <div class="booking-toolbar-actions">
+        {{-- Filter --}}
+        <div class="booking-date-filter">
+            <button
+                type="button"
+                class="booking-filter-btn"
+                onclick="toggleBookingFilter()">
 
-        <div
-            class="booking-filter-dropdown"
-            id="bookingFilterDropdown">
+                <i class="bi bi-calendar3"></i>
 
-            <button onclick="applyDateFilter('all')">
-                Semua Waktu
+                <span id="bookingFilterLabel">
+                    Filter
+                </span>
+
+                <i class="bi bi-chevron-down"></i>
+
             </button>
 
-            <button onclick="applyDateFilter('today')">
-                Hari Ini
-            </button>
+            <div
+                class="booking-filter-dropdown"
+                id="bookingFilterDropdown">
 
-            <button onclick="applyDateFilter('month')">
-                Bulan Ini
-            </button>
+                <button onclick="applyDateFilter('all')">
+                    Semua Waktu
+                </button>
 
-            <button onclick="applyDateFilter('lastMonth')">
-                Bulan Lalu
-            </button>
+                <button onclick="applyDateFilter('today')">
+                    Hari Ini
+                </button>
 
-            <button onclick="applyDateFilter('3month')">
-                3 Bulan Terakhir
-            </button>
+                <button onclick="applyDateFilter('month')">
+                    Bulan Ini
+                </button>
 
-            <button onclick="applyDateFilter('year')">
-                Tahun Ini
-            </button>
+                <button onclick="applyDateFilter('lastMonth')">
+                    Bulan Lalu
+                </button>
 
-            <hr>
+                <button onclick="applyDateFilter('3month')">
+                    3 Bulan Terakhir
+                </button>
 
-            <button onclick="openCustomDateModal()">
-                Custom...
-            </button>
+                <button onclick="applyDateFilter('year')">
+                    Tahun Ini
+                </button>
 
+                <hr>
+
+                <button onclick="openCustomDateModal()">
+                    Custom...
+                </button>
+
+            </div>
         </div>
+
+        {{-- Download Excel --}}
+        <a
+            href="{{ route('admin.booking.export', request()->query()) }}"
+            class="booking-export-btn"
+            title="Download Excel">
+
+            <i class="bi bi-download"></i>
+
+        </a>
 
     </div>
 </div>

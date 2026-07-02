@@ -65,6 +65,9 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/admin/booking/update-status/{id}', [BookingController::class, 'updateStatus']);
     Route::delete('/admin/booking/{id}',             [BookingController::class, 'destroy'])->name('booking.destroy');
 
+    // route export excel
+    Route::get('/admin/booking/export',[BookingController::class, 'export'])->name('admin.booking.export');
+
     Route::post(
         '/admin/users/{id}/change-password',
         [AdminUserController::class, 'changePassword']

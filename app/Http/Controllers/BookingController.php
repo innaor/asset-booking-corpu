@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Asset;
 use Carbon\Carbon;
+use App\Exports\BookingExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookingController extends Controller
 {
@@ -165,6 +167,30 @@ class BookingController extends Controller
         return back()->with('success', 'Status booking berhasil diupdate.');
     }
 
+    public function export(Request $request)
+    {
+        $query = Booking::with(['asset', 'user']);
+
+        // Filter berdasarkan rentang tanggal
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+
+            $query->whereBetween('date', [
+                $request->start_date,
+                $request->end_date
+            ]);
+        }
+
+        $bookings = $query
+            ->orderBy('date')
+            ->orderBy('start_time')
+            ->get();
+
+        return Excel::download(
+            new BookingExport($bookings),
+            'Data Booking.xlsx'
+        );
+    }
+
     public function autoUpdateStatus()
     {
         $now = Carbon::now();
@@ -182,4 +208,12 @@ class BookingController extends Controller
             }
         }
     }
+
+    // public function export(Request $request)
+    // {
+    //     return Excel::download(
+    //         new BookingExport,
+    //         'Data Booking ' . now()->format('d-m-Y') . '.xlsx'
+    //     );
+    // }
 }
