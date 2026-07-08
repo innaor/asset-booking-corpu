@@ -53,12 +53,12 @@
                                     onclick="openPasswordModal({{ $user->id }})">
                                     Ganti Password
                                 </button>
-                                <button
+                                <!-- <button
                                     type="button"
                                     class="dropdown-item"
                                     onclick="openImpersonateModal({{ $user->id }})">
                                     Impersonate
-                                </button>
+                                </button> -->
                             </div>
                         </td>
                     </tr>
