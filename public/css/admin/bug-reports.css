@@ -1,0 +1,96 @@
+/* ======================================================
+   STATUS BUG REPORT
+   ====================================================== */
+
+.bug-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.bug-status-pending {
+    background: #FEF3C7;
+    color: #B45309;
+}
+
+.bug-status-in_progress {
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.bug-status-resolved {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.bug-status-rejected {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+/* =====================================
+   FILTER TABS
+===================================== */
+
+.bug-filter-tabs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.bug-filter-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border: 1px solid #dbe5ea;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #4b5563;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: .25s;
+    font-family: var(--font-family);
+    text-decoration: none;
+}
+
+.bug-filter-tab i {
+    font-size: 15px;
+}
+
+.bug-filter-tab:hover {
+    background: #f7fbfc;
+    border-color: var(--color-primary-200);
+    color: var(--color-primary-600);
+}
+
+.bug-filter-tab.active {
+    background: var(--color-primary-400);
+    color: #ffffff;
+    border-color: var(--color-primary-400);
+    box-shadow: 0 4px 12px rgba(38,150,162,.18);
+}
+
+.bug-tab-count {
+    min-width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(255,255,255,.22);
+    color: inherit;
+}
+
+.bug-filter-tab:not(.active) .bug-tab-count {
+    background: #eef2f7;
+    color: #6b7280;
+}

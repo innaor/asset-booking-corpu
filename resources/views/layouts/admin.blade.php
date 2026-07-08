@@ -63,6 +63,12 @@
                 Activity Log
             </a>
 
+            <a href="/admin/bug-reports"
+                class="sidebar-link {{ request()->is('admin/bug-reports*') ? 'active' : '' }}">
+                <i class="bi bi-flag"></i>
+                Aduan Bug
+            </a>
+
             <div class="sidebar-divider"></div>
 
             <a href="/logout" class="sidebar-link logout">

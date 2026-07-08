@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\BugReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,11 +80,15 @@ Route::middleware(['admin'])->group(function () {
 
 
     //route impersonate
-    Route::post(
-        '/admin/users/{id}/impersonate',
-        [AdminUserController::class, 'impersonate']
-    )->name('admin.users.impersonate');
+    // Route::post(
+    //     '/admin/users/{id}/impersonate',
+    //     [AdminUserController::class, 'impersonate']
+    // )->name('admin.users.impersonate');
 
+    // bug report
+    // route bug report - admin
+    Route::get('/admin/bug-reports', [BugReportController::class, 'adminIndex']);
+    Route::post('/admin/bug-reports/{id}/update-status', [BugReportController::class, 'updateStatus']);
 
     //route activity log
     Route::get('/admin/activity-log', [ActivityLogController::class, 'index']);
@@ -127,6 +132,10 @@ Route::middleware(['internal'])->group(function () {
     Route::get('/user/booking/edit/{id}',        [BookingController::class, 'edit']);
     Route::post('/user/booking/update/{id}',     [BookingController::class, 'update']);
     Route::delete('/user/booking/delete/{id}',   [BookingController::class, 'destroy']);
+
+    // Bug Report User
+    Route::get('/user/bug-reports', [BugReportController::class, 'index']);
+    Route::post('/user/bug-reports/store', [BugReportController::class, 'store']);
 
 });
 

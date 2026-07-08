@@ -48,6 +48,12 @@
                 Booking Saya
             </a>
 
+            <a href="/user/bug-reports"
+                class="sidebar-link {{ request()->is('user/bug-reports*') ? 'active' : '' }}">
+                    <i class="bi bi-flag"></i>
+                    Aduan Bug
+            </a>
+
             <span class="sidebar-label">Akun</span>
 
             <a href="#"
