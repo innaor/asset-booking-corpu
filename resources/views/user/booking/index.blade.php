@@ -57,16 +57,8 @@
                     </td>
                     <td>
                         <div class="btn-group">
-                            @if(in_array($item->status, ['approved', 'ongoing', 'completed']))
-                                <button class="btn-icon" disabled title="Tidak dapat diedit"
-                                    style="opacity:0.4; cursor:not-allowed;">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn-icon" disabled title="Tidak dapat dihapus"
-                                    style="opacity:0.4; cursor:not-allowed;">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            @else
+                            @if($item->status == 'pending')
+
                                 {{-- Tombol Edit --}}
                                 <button class="btn-icon btn-icon-primary"
                                         title="Edit booking"
@@ -83,9 +75,30 @@
                                 {{-- Tombol Hapus --}}
                                 <button class="btn-icon btn-icon-danger"
                                         title="Hapus booking"
-                                        onclick="confirmDelete('{{ $item->id }}', '{{ $item->asset->name }}', '{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}')">
+                                        onclick="confirmDelete(
+                                            '{{ $item->id }}',
+                                            '{{ $item->asset->name }}',
+                                            '{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}'
+                                        )">
                                     <i class="bi bi-trash"></i>
                                 </button>
+
+                            @else
+
+                                <button class="btn-icon"
+                                        disabled
+                                        title="Booking hanya dapat diedit saat masih Pending"
+                                        style="opacity:.4; cursor:not-allowed;">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+
+                                <button class="btn-icon"
+                                        disabled
+                                        title="Booking hanya dapat dihapus saat masih Pending"
+                                        style="opacity:.4; cursor:not-allowed;">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+
                             @endif
                         </div>
                     </td>
@@ -160,10 +173,10 @@
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-md);">
                 <div class="form-group">
                     <label>Jam Mulai</label>
-                    <select name="start_time" id="new_start_time" required>
-                        @for($i = 8; $i <= 16; $i++)
-                            <option value="{{ sprintf('%02d:00:00', $i) }}"
-                                {{ old('start_time') == sprintf('%02d:00:00', $i) ? 'selected' : '' }}>
+                    <select name="start_time" id="start_time" required>
+                        <option value="" selected>-</option>
+                        @for($i = 8; $i <= 18; $i++)
+                            <option value="{{ sprintf('%02d:00', $i) }}">
                                 {{ sprintf('%02d:00', $i) }}
                             </option>
                         @endfor
@@ -171,10 +184,10 @@
                 </div>
                 <div class="form-group">
                     <label>Jam Selesai</label>
-                    <select name="end_time" id="new_end_time" required>
-                        @for($i = 9; $i <= 17; $i++)
-                            <option value="{{ sprintf('%02d:00:00', $i) }}"
-                                {{ old('end_time') == sprintf('%02d:00:00', $i) ? 'selected' : '' }}>
+                    <select name="end_time" id="end_time" required>
+                        <option value="" selected>-</option>
+                        @for($i = 9; $i <= 19; $i++)
+                            <option value="{{ sprintf('%02d:00', $i) }}">
                                 {{ sprintf('%02d:00', $i) }}
                             </option>
                         @endfor
@@ -246,6 +259,7 @@
                 <div class="form-group">
                     <label>Jam Mulai</label>
                     <select name="start_time" id="edit_start_time" required>
+                        <option value="" selected>-</option>
                         @for($i = 8; $i <= 16; $i++)
                             <option value="{{ sprintf('%02d:00:00', $i) }}">
                                 {{ sprintf('%02d:00', $i) }}
@@ -256,6 +270,7 @@
                 <div class="form-group">
                     <label>Jam Selesai</label>
                     <select name="end_time" id="edit_end_time" required>
+                        <option value="" selected>-</option>
                         @for($i = 9; $i <= 17; $i++)
                             <option value="{{ sprintf('%02d:00:00', $i) }}">
                                 {{ sprintf('%02d:00', $i) }}
@@ -380,20 +395,57 @@
     const todayStr = '{{ date('Y-m-d') }}';
 
     function updateDisabledHours(dateEl, startEl, endEl) {
+
         const isToday = dateEl.value === todayStr;
+
+        // Simpan semua option sekali saja
+        if (!startEl.dataset.original) {
+            startEl.dataset.original = startEl.innerHTML;
+        }
+
+        if (!endEl.dataset.original) {
+            endEl.dataset.original = endEl.innerHTML;
+        }
+
+        // Reset dropdown
+        startEl.innerHTML = startEl.dataset.original;
+        endEl.innerHTML   = endEl.dataset.original;
+
+        // ==========================
+        // FILTER JAM MULAI
+        // ==========================
         Array.from(startEl.options).forEach(opt => {
+
             const h = parseInt(opt.value);
-            opt.disabled = isToday && h <= nowHour;
-            if (opt.disabled && opt.selected) {
-                const first = Array.from(startEl.options).find(o => !o.disabled);
-                if (first) first.selected = true;
+
+            if (isNaN(h)) return;
+
+            if (isToday && h <= nowHour) {
+                opt.remove();
             }
+
         });
-        const startH = parseInt(startEl.value);
+
+        // ==========================
+        // FILTER JAM SELESAI
+        // ==========================
+        const startHour = parseInt(startEl.value);
+
         Array.from(endEl.options).forEach(opt => {
+
             const h = parseInt(opt.value);
-            opt.disabled = h <= startH || (isToday && h <= nowHour + 1);
+
+            if (isNaN(h)) return;
+
+            if (
+                h <= startHour ||
+                (isToday && h <= nowHour + 1)
+            ) {
+                opt.remove();
+            }
+
         });
+
     }
 
     const btnOpen   = document.getElementById('btnOpenModal');
@@ -403,17 +455,42 @@
     const newStart  = document.getElementById('new_start_time');
     const newEnd    = document.getElementById('new_end_time');
 
-    btnOpen.addEventListener('click', () => {
+    // btnOpen.addEventListener('click', () => {
+    //     openModal('modalBooking');
+    //     updateDisabledHours(newDate, newStart, newEnd);
+    // });
+    // btnClose.addEventListener('click',  () => closeModal('modalBooking'));
+    // btnCancel.addEventListener('click', () => closeModal('modalBooking'));
+    // document.getElementById('modalBooking').addEventListener('click', function(e) {
+    //     if (e.target === this) closeModal('modalBooking');
+    // });
+    // newDate.addEventListener('change',  () => updateDisabledHours(newDate, newStart, newEnd));
+    // newStart.addEventListener('change', () => updateDisabledHours(newDate, newStart, newEnd));
+
+    console.log({
+        btnOpen,
+        btnClose,
+        btnCancel,
+        newDate,
+        newStart,
+        newEnd,
+        modalBooking: document.getElementById('modalBooking')
+    });
+
+    btnOpen?.addEventListener('click', () => {
         openModal('modalBooking');
         updateDisabledHours(newDate, newStart, newEnd);
     });
-    btnClose.addEventListener('click',  () => closeModal('modalBooking'));
-    btnCancel.addEventListener('click', () => closeModal('modalBooking'));
-    document.getElementById('modalBooking').addEventListener('click', function(e) {
+
+    btnClose?.addEventListener('click', () => closeModal('modalBooking'));
+    btnCancel?.addEventListener('click', () => closeModal('modalBooking'));
+
+    document.getElementById('modalBooking')?.addEventListener('click', function(e) {
         if (e.target === this) closeModal('modalBooking');
     });
-    newDate.addEventListener('change',  () => updateDisabledHours(newDate, newStart, newEnd));
-    newStart.addEventListener('change', () => updateDisabledHours(newDate, newStart, newEnd));
+
+    newDate?.addEventListener('change', () => updateDisabledHours(newDate, newStart, newEnd));
+    newStart?.addEventListener('change', () => updateDisabledHours(newDate, newStart, newEnd));
 
     @if($errors->any() && !session('_edit_mode'))
         openModal('modalBooking');
@@ -427,6 +504,7 @@
     const editEnd   = document.getElementById('edit_end_time');
 
     function openEditModal(id, assetId, date, startTime, endTime) {
+        console.log('EDIT DIKLIK');
         // Isi form
         document.getElementById('formEdit').action = '/user/booking/update/' + id;
         document.getElementById('edit_asset_id').value = assetId;
@@ -445,13 +523,34 @@
         updateDisabledHours(editDate, editStart, editEnd);
     }
 
-    document.getElementById('btnCloseEdit').addEventListener('click',  () => closeModal('modalEdit'));
-    document.getElementById('btnCancelEdit').addEventListener('click', () => closeModal('modalEdit'));
-    document.getElementById('modalEdit').addEventListener('click', function(e) {
+    // document.getElementById('btnCloseEdit').addEventListener('click',  () => closeModal('modalEdit'));
+    // document.getElementById('btnCancelEdit').addEventListener('click', () => closeModal('modalEdit'));
+    // document.getElementById('modalEdit').addEventListener('click', function(e) {
+    //     if (e.target === this) closeModal('modalEdit');
+    // });
+    // editDate.addEventListener('change',  () => updateDisabledHours(editDate, editStart, editEnd));
+    // editStart.addEventListener('change', () => updateDisabledHours(editDate, editStart, editEnd));
+
+    console.log({
+        editDate,
+        editStart,
+        editEnd,
+        btnCloseEdit: document.getElementById('btnCloseEdit'),
+        btnCancelEdit: document.getElementById('btnCancelEdit'),
+        modalEdit: document.getElementById('modalEdit')
+    });
+
+    document.getElementById('btnCloseEdit')?.addEventListener('click', () => closeModal('modalEdit'));
+
+    document.getElementById('btnCancelEdit')?.addEventListener('click', () => closeModal('modalEdit'));
+
+    document.getElementById('modalEdit')?.addEventListener('click', function(e) {
         if (e.target === this) closeModal('modalEdit');
     });
-    editDate.addEventListener('change',  () => updateDisabledHours(editDate, editStart, editEnd));
-    editStart.addEventListener('change', () => updateDisabledHours(editDate, editStart, editEnd));
+
+    editDate?.addEventListener('change', () => updateDisabledHours(editDate, editStart, editEnd));
+
+    editStart?.addEventListener('change', () => updateDisabledHours(editDate, editStart, editEnd));
 
     @if($errors->any() && session('_edit_mode'))
         openModal('modalEdit');

@@ -57,19 +57,61 @@
                         @endif
                     </td>
                     <td>
-                        @if($asset->status == 'draft')
-                            <a href="/admin/assets/toggle/{{ $asset->id }}"
-                               class="btn btn-success btn-sm">
-                                <i class="bi bi-eye"></i>
-                                Publish
-                            </a>
-                        @else
-                            <a href="/admin/assets/toggle/{{ $asset->id }}"
-                               class="btn btn-secondary btn-sm">
-                                <i class="bi bi-eye-slash"></i>
-                                Unpublish
-                            </a>
-                        @endif
+                        <div class="btn-grup">
+
+                            @if($asset->status == 'draft')
+                                <a href="/admin/assets/toggle/{{ $asset->id }}"
+                                class="btn btn-success btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                    Publish
+                                </a>
+                            @else
+                                <a href="/admin/assets/toggle/{{ $asset->id }}"
+                                class="btn btn-secondary btn-sm">
+                                    <i class="bi bi-eye-slash"></i>
+                                    Unpublish
+                                </a>
+                            @endif
+
+                            {{-- Edit --}}
+                            <button
+                                type="button"
+                                class="btn-icon btn-icon-primary"
+                                title="Edit Aset"
+                                onclick="openEditAsset(
+                                    {{ $asset->id }},
+                                    '{{ $asset->name }}',
+                                    {{ $asset->subcategory->category->id }},
+                                    {{ $asset->subcategory_id }}
+                                )">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+
+                            {{-- Delete --}}
+                            <form action="{{ route('admin.assets.destroy', $asset->id) }}"
+                                method="POST"
+                                style="display:inline"
+                                onsubmit="return confirm('Hapus aset {{ $asset->name }}?')">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button
+                                    type="button"
+                                    class="btn-icon btn-icon-danger"
+                                    title="Hapus Asset"
+                                    onclick="confirmDeleteAsset(
+                                        {{ $asset->id }},
+                                        '{{ $asset->name }}'
+                                    )">
+
+                                    <i class="bi bi-trash"></i>
+
+                                </button>
+
+                            </form>
+
+                        </div>
                     </td>
                 </tr>
                 @empty
@@ -163,6 +205,186 @@
     </div>
 </div>
 
+{{-- ===================================================
+     MODAL: EDIT ASSET
+     =================================================== --}}
+<div id="editAssetModal" class="modal-overlay">
+    <div class="modal-box">
+
+        <div class="modal-header">
+            <div>
+                <h3 class="modal-title">
+                    <i class="bi bi-pencil-square"></i>
+                    Edit Asset
+                </h3>
+                <p class="modal-subtitle">
+                    Ubah informasi asset.
+                </p>
+            </div>
+
+            <button class="modal-close"
+                    type="button"
+                    onclick="closeModal('editAssetModal')">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <form
+            id="formEditAsset"
+            method="POST">
+
+            @csrf
+
+            <div class="form-group">
+                <label>Nama Asset</label>
+
+                <input
+                    type="text"
+                    name="name"
+                    id="edit_name"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Kategori</label>
+
+                <select
+                    id="edit_category"
+                    required>
+
+                    <option value="">Pilih Kategori</option>
+
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">
+                            {{ $category->category_name }}
+                        </option>
+                    @endforeach
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Subkategori</label>
+
+                <select
+                    name="subcategory_id"
+                    id="edit_subcategory"
+                    required>
+
+                    <option value="">Pilih Subkategori</option>
+
+                    @foreach($subcategories as $subcategory)
+                        <option
+                            value="{{ $subcategory->id }}"
+                            data-category="{{ $subcategory->category_id }}">
+
+                            {{ $subcategory->subcategory_name }}
+
+                        </option>
+                    @endforeach
+
+                </select>
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="closeModal('editAssetModal')">
+
+                    Batal
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    Simpan Perubahan
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{{-- ===================================================
+     MODAL: HAPUS ASSET
+=================================================== --}}
+<div id="deleteAssetModal"
+     class="modal-overlay"
+     role="dialog"
+     aria-modal="true">
+
+    <div class="modal-box"
+         style="max-width:420px; text-align:center; padding:var(--space-xl);">
+
+        <div style="margin-bottom:var(--space-md);">
+            <i class="bi bi-trash-fill"
+               style="font-size:56px; color:var(--color-danger-btn);"></i>
+        </div>
+
+        <h2 style="
+            font-size:18px;
+            font-weight:600;
+            color:var(--color-gray-900);
+            margin-bottom:8px;">
+
+            Hapus Asset?
+
+        </h2>
+
+        <p id="deleteAssetInfo"
+           style="
+            color:var(--color-gray-600);
+            font-size:13px;
+            margin-bottom:var(--space-lg);">
+
+            Asset ini akan dihapus permanen.
+
+        </p>
+
+        <form id="formDeleteAsset"
+              method="POST"
+              action="">
+
+            @csrf
+            @method('DELETE')
+
+            <div style="display:flex; gap:var(--space-sm);">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    style="flex:1; justify-content:center;"
+                    onclick="closeModal('deleteAssetModal')">
+
+                    <i class="bi bi-x-circle"></i>
+                    Batal
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-danger"
+                    style="flex:1; justify-content:center;">
+
+                    <i class="bi bi-trash"></i>
+                    Ya, Hapus
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 {{-- ===================================================
      MODAL: TAMBAH SUBKATEGORI
@@ -275,6 +497,78 @@
             }
         });
     });
+
+    function openEditAsset(id, name, categoryId, subcategoryId){
+        // Ubah action form
+        document.getElementById('formEditAsset').action =
+            '/admin/assets/update/' + id;
+
+        // Isi nama asset
+        document.getElementById('edit_name').value = name;
+
+        // Pilih kategori
+        const categorySelect = document.getElementById('edit_category');
+        categorySelect.value = categoryId;
+
+        // Filter subkategori sesuai kategori
+        const subcategorySelect = document.getElementById('edit_subcategory');
+
+        Array.from(subcategorySelect.options).forEach(option => {
+
+            if(option.value === ''){
+                option.hidden = false;
+                return;
+            }
+
+            option.hidden =
+                option.dataset.category != categoryId;
+
+        });
+
+        // Pilih subkategori
+        subcategorySelect.value = subcategoryId;
+
+        // Buka modal
+        openModal('editAssetModal');
+    }
+
+    document.getElementById('edit_category')
+    .addEventListener('change', function () {
+
+        const categoryId = this.value;
+
+        const subcategory =
+            document.getElementById('edit_subcategory');
+
+        subcategory.value = '';
+
+        Array.from(subcategory.options).forEach(option => {
+
+            if(option.value === ''){
+                option.hidden = false;
+                return;
+            }
+
+            option.hidden =
+                option.dataset.category != categoryId;
+
+        });
+
+    });
+
+    function confirmDeleteAsset(id, name)
+    {
+        document.getElementById('formDeleteAsset').action =
+            '/admin/assets/delete/' + id;
+
+        document.getElementById('deleteAssetInfo').innerHTML =
+            'Asset <strong>' + name +
+            '</strong> akan dihapus permanen dan tidak dapat dikembalikan.';
+
+        openModal('deleteAssetModal');
+    }
+
+
 </script>
 @endpush
 

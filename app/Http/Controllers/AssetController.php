@@ -45,6 +45,32 @@ class AssetController extends Controller
         return redirect('/admin/assets')->with('success', 'Aset berhasil ditambahkan');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'subcategory_id' => 'required'
+        ]);
+
+        $asset = Asset::findOrFail($id);
+
+        $asset->update([
+            'name' => $request->name,
+            'subcategory_id' => $request->subcategory_id
+        ]);
+
+        return back()->with('success', 'Aset berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        $asset = Asset::findOrFail($id);
+
+        $asset->delete();
+
+        return back()->with('success', 'Aset berhasil dihapus.');
+    }
+
     // Publish / Unpublish
     public function toggleStatus($id)
     {

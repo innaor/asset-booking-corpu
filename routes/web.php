@@ -55,6 +55,10 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/admin/assets/store',           [AssetController::class, 'store']);
     Route::get('/admin/assets/toggle/{id}',      [AssetController::class, 'toggleStatus']);
     Route::post('/admin/subcategories/store',    [AssetController::class, 'storeSubcategory']);
+    Route::post('/admin/assets/update/{id}', [AssetController::class, 'update'])->name('admin.assets.update');
+    // Route::post('/admin/assets/update/{id}', [AssetController::class, 'update'])->name('admin.assets.update');
+    // Route::delete('/admin/assets/delete/{id}', [AssetController::class, 'destroy'])->name('admin.assets.destroy');
+    Route::delete('/admin/assets/delete/{id}', [AssetController::class, 'destroy'])->name('admin.assets.destroy');
 
     // Booking Admin
     Route::get('/admin/booking', function () {

@@ -187,9 +187,9 @@
                 <div class="form-group">
                     <label for="start_time">Jam Mulai</label>
                     <select name="start_time" id="start_time" required>
-                        @for($i = 8; $i <= 16; $i++)
-                            <option value="{{ sprintf('%02d:00:00', $i) }}"
-                                {{ old('start_time') == sprintf('%02d:00:00', $i) ? 'selected' : '' }}>
+                        <option value="" selected>-</option>
+                        @for($i = 8; $i <= 18; $i++)
+                            <option value="{{ sprintf('%02d:00', $i) }}">
                                 {{ sprintf('%02d:00', $i) }}
                             </option>
                         @endfor
@@ -198,12 +198,15 @@
                 <div class="form-group">
                     <label for="end_time">Jam Selesai</label>
                     <select name="end_time" id="end_time" required>
-                        @for($i = 9; $i <= 17; $i++)
-                            <option value="{{ sprintf('%02d:00:00', $i) }}"
-                                {{ old('end_time') == sprintf('%02d:00:00', $i) ? 'selected' : '' }}>
+
+                        <option value="" selected>-</option>
+
+                        @for($i = 9; $i <= 19; $i++)
+                            <option value="{{ sprintf('%02d:00', $i) }}">
                                 {{ sprintf('%02d:00', $i) }}
                             </option>
                         @endfor
+
                     </select>
                 </div>
             </div>
@@ -351,6 +354,67 @@
 
     searchInput.addEventListener('input', applyFilters);
     filterKategori.addEventListener('change', applyFilters);
+
+    function updateAvailableTime() {
+
+        const dateInput = document.getElementById('date');
+        const startTime = document.getElementById('start_time');
+        const endTime = document.getElementById('end_time');
+
+        if (!dateInput || !startTime || !endTime) return;
+
+        const selectedDate = dateInput.value;
+
+        const now = new Date();
+
+        const today =
+            now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0');
+
+        // Reset semua option
+        [...startTime.options].forEach(option => option.disabled = false);
+        [...endTime.options].forEach(option => option.disabled = false);
+
+        // Kalau bukan hari ini, selesai
+        if (selectedDate !== today) return;
+
+        const currentHour = now.getHours();
+
+        // Disable jam yang sudah lewat
+        [...startTime.options].forEach(option => {
+
+            const hour = parseInt(option.value.substring(0,2));
+
+            if(hour <= currentHour){
+                option.disabled = true;
+            }
+
+        });
+
+        [...endTime.options].forEach(option => {
+
+            const hour = parseInt(option.value.substring(0,2));
+
+            if(hour <= currentHour + 1){
+                option.disabled = true;
+            }
+
+        });
+
+    }
+
+    document.getElementById('date')
+    .addEventListener('change', updateAvailableTime);
+
+    document.getElementById('btnOpenModal')
+    .addEventListener('click', function(){
+
+        setTimeout(updateAvailableTime,100);
+
+    });
+
+    window.addEventListener('load', updateAvailableTime);
 </script>
 @endpush
 
