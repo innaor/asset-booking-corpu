@@ -264,14 +264,14 @@
             </div>
 
             <div class="form-group">
-                <label>Subkategori</label>
+                <label>Jenis</label>
 
                 <select
                     name="subcategory_id"
                     id="edit_subcategory"
                     required>
 
-                    <option value="">Pilih Subkategori</option>
+                    <option value="">Pilih Jenis</option>
 
                     @foreach($subcategories as $subcategory)
                         <option
