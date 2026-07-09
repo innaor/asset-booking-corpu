@@ -396,3 +396,30 @@
     font-size:18px;
     color:#ffffff;
 }
+
+/* =====================================
+   STATUS STATIS (ongoing/completed — tidak bisa diedit manual)
+===================================== */
+
+.booking-status-static {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.booking-status-static::after {
+    content: none; /* hilangkan panah dropdown */
+}
+
+
+@media (max-width: 640px) {
+    #modalViewCondition .modal-box > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+    #modalViewCondition .modal-box > div[style*="grid-template-columns"] > div:last-child {
+        border-left: none !important;
+        padding-left: 0 !important;
+        border-top: 1px solid var(--color-gray-200);
+        padding-top: var(--space-lg);
+    }
+}

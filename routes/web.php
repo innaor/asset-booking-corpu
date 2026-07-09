@@ -93,6 +93,10 @@ Route::middleware(['admin'])->group(function () {
     //route activity log
     Route::get('/admin/activity-log', [ActivityLogController::class, 'index']);
 
+    // route checkin checkout
+    Route::post('/admin/booking/checkin/{id}',  [BookingController::class, 'checkin'])->name('booking.checkin');
+    Route::post('/admin/booking/checkout/{id}', [BookingController::class, 'checkout'])->name('booking.checkout');
+
 });
 
 

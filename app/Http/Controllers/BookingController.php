@@ -216,4 +216,68 @@ class BookingController extends Controller
     //         'Data Booking ' . now()->format('d-m-Y') . '.xlsx'
     //     );
     // }
+
+
+    // Method Check in
+    public function checkin(Request $request, $id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        if ($booking->status !== 'approved') {
+            return back()->with('error', 'Check-in hanya bisa dilakukan pada booking dengan status Approved.');
+        }
+
+        $request->validate([
+            'checkin_condition' => 'required|in:baik,rusak_ringan,rusak_berat',
+            'checkin_note'       => 'nullable|string',
+            'checkin_photo'      => 'nullable|image|max:2048',
+        ]);
+
+        $path = null;
+        if ($request->hasFile('checkin_photo')) {
+            $path = $request->file('checkin_photo')->store('booking-conditions', 'public');
+        }
+
+        $booking->update([
+            'status'             => 'ongoing',
+            'checkin_condition'  => $request->checkin_condition,
+            'checkin_note'       => $request->checkin_note,
+            'checkin_photo'      => $path,
+            'checkin_at'         => now(),
+            'checkin_by'         => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Check-in berhasil dicatat. Status booking menjadi Ongoing.');
+    }
+
+    public function checkout(Request $request, $id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        if ($booking->status !== 'ongoing') {
+            return back()->with('error', 'Check-out hanya bisa dilakukan pada booking dengan status Ongoing.');
+        }
+
+        $request->validate([
+            'checkout_condition' => 'required|in:baik,rusak_ringan,rusak_berat',
+            'checkout_note'       => 'nullable|string',
+            'checkout_photo'      => 'nullable|image|max:2048',
+        ]);
+
+        $path = null;
+        if ($request->hasFile('checkout_photo')) {
+            $path = $request->file('checkout_photo')->store('booking-conditions', 'public');
+        }
+
+        $booking->update([
+            'status'              => 'completed',
+            'checkout_condition'  => $request->checkout_condition,
+            'checkout_note'       => $request->checkout_note,
+            'checkout_photo'      => $path,
+            'checkout_at'         => now(),
+            'checkout_by'         => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Check-out berhasil dicatat. Status booking menjadi Completed.');
+    }
 }

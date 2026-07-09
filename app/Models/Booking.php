@@ -20,7 +20,24 @@ class Booking extends Model
         'date',
         'start_time',
         'end_time',
-        'status'
+        'status',
+        // Check-in
+        'checkin_condition',
+        'checkin_note',
+        'checkin_photo',
+        'checkin_at',
+        'checkin_by',
+        // Check-out
+        'checkout_condition',
+        'checkout_note',
+        'checkout_photo',
+        'checkout_at',
+        'checkout_by',
+    ];
+
+    protected $casts = [
+        'checkin_at'  => 'datetime',
+        'checkout_at' => 'datetime',
     ];
 
     public function asset()
@@ -33,4 +50,13 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function checkinBy()
+    {
+        return $this->belongsTo(User::class, 'checkin_by');
+    }
+
+    public function checkoutBy()
+    {
+        return $this->belongsTo(User::class, 'checkout_by');
+    }
 }

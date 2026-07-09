@@ -83,19 +83,31 @@
                                     <i class="bi bi-trash"></i>
                                 </button>
 
-                            @else
+                            @elseif(in_array($item->status, ['ongoing', 'completed']))
 
-                                <button class="btn-icon"
-                                        disabled
-                                        title="Booking hanya dapat diedit saat masih Pending"
-                                        style="opacity:.4; cursor:not-allowed;">
-                                    <i class="bi bi-pencil"></i>
+                                {{-- Tombol Lihat Kondisi --}}
+                                <button class="btn-icon btn-icon-primary"
+                                        title="Lihat kondisi barang"
+                                        onclick="openViewConditionModal(
+                                            '{{ $item->asset->name }}',
+                                            '{{ $item->checkin_condition }}',
+                                            `{{ $item->checkin_note }}`,
+                                            '{{ $item->checkin_photo ? asset('storage/'.$item->checkin_photo) : '' }}',
+                                            '{{ $item->checkin_at ? \Carbon\Carbon::parse($item->checkin_at)->format('d/m/Y H:i') : '-' }}',
+                                            '{{ $item->checkout_condition }}',
+                                            `{{ $item->checkout_note }}`,
+                                            '{{ $item->checkout_photo ? asset('storage/'.$item->checkout_photo) : '' }}',
+                                            '{{ $item->checkout_at ? \Carbon\Carbon::parse($item->checkout_at)->format('d/m/Y H:i') : '-' }}'
+                                        )">
+                                    <i class="bi bi-clipboard-check"></i>
                                 </button>
 
-                                <button class="btn-icon"
-                                        disabled
-                                        title="Booking hanya dapat dihapus saat masih Pending"
-                                        style="opacity:.4; cursor:not-allowed;">
+                            @else
+
+                                <button class="btn-icon" disabled title="Booking hanya dapat diedit saat masih Pending" style="opacity:.4; cursor:not-allowed;">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn-icon" disabled title="Booking hanya dapat dihapus saat masih Pending" style="opacity:.4; cursor:not-allowed;">
                                     <i class="bi bi-trash"></i>
                                 </button>
 
@@ -373,6 +385,55 @@
 </div>
 @endif
 
+{{-- ===================================================
+     MODAL: LIHAT KONDISI (Read-only)
+     =================================================== --}}
+<div class="modal-overlay" id="modalViewCondition" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:640px;">
+        <div class="modal-header">
+            <div>
+                <h2 class="modal-title" id="viewConditionTitle">
+                    <i class="bi bi-clipboard-check" style="color:var(--color-primary-400);"></i>
+                    Riwayat Kondisi Barang
+                </h2>
+            </div>
+            <button class="modal-close" onclick="closeModal('modalViewCondition')" aria-label="Tutup">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-lg);">
+
+            <div>
+                <h3 style="font-size:14px; font-weight:600; margin-bottom:8px;">
+                    <i class="bi bi-box-arrow-in-right"></i> Saat Check-in
+                </h3>
+                <p style="margin:0 0 8px; font-size:12px; color:var(--color-gray-400);" id="viewCheckinAt"></p>
+                <p style="margin:0 0 4px;">Kondisi: <strong id="viewCheckinCondition"></strong></p>
+                <p style="margin:0 0 8px; color:var(--color-gray-600); font-size:13px;" id="viewCheckinNote"></p>
+                <img id="viewCheckinPhoto" src="" style="max-width:100%; border-radius:8px; display:none;">
+            </div>
+
+            <div style="border-left:1px solid var(--color-gray-200); padding-left:var(--space-lg);">
+                <h3 style="font-size:14px; font-weight:600; margin-bottom:8px;">
+                    <i class="bi bi-box-arrow-in-left"></i> Saat Check-out
+                </h3>
+                <p style="margin:0 0 8px; font-size:12px; color:var(--color-gray-400);" id="viewCheckoutAt"></p>
+                <p style="margin:0 0 4px;">Kondisi: <strong id="viewCheckoutCondition"></strong></p>
+                <p style="margin:0 0 8px; color:var(--color-gray-600); font-size:13px;" id="viewCheckoutNote"></p>
+                <img id="viewCheckoutPhoto" src="" style="max-width:100%; border-radius:8px; display:none;">
+            </div>
+
+        </div>
+
+        <div class="modal-footer" style="margin-top:var(--space-lg);">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalViewCondition')">
+                <i class="bi bi-x-circle"></i> Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
 
 @push('scripts')
 <script>
@@ -573,9 +634,39 @@
     // ESC menutup semua modal
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            ['modalBooking','modalEdit','modalDelete'].forEach(closeModal);
+            ['modalBooking','modalEdit','modalDelete', 'modalViewCondition'].forEach(closeModal);
         }
     });
+
+
+    // ============================================================
+    // MODAL LIHAT KONDISI (read-only)
+    // ============================================================
+    const conditionLabels = { baik: 'Baik', rusak_ringan: 'Rusak Ringan', rusak_berat: 'Rusak Berat' };
+
+    function openViewConditionModal(assetName, ciCondition, ciNote, ciPhoto, ciAt, coCondition, coNote, coPhoto, coAt) {
+        document.getElementById('viewConditionTitle').innerHTML =
+            '<i class="bi bi-clipboard-check" style="color:var(--color-primary-400);"></i> Riwayat Kondisi: ' + assetName;
+
+        document.getElementById('viewCheckinAt').textContent = ciAt;
+        document.getElementById('viewCheckinCondition').textContent = conditionLabels[ciCondition] || '-';
+        document.getElementById('viewCheckinNote').textContent = ciNote || '-';
+        const ciImg = document.getElementById('viewCheckinPhoto');
+        if (ciPhoto) { ciImg.src = ciPhoto; ciImg.style.display = 'block'; } else { ciImg.style.display = 'none'; }
+
+        document.getElementById('viewCheckoutAt').textContent = coAt;
+        document.getElementById('viewCheckoutCondition').textContent = conditionLabels[coCondition] || '-';
+        document.getElementById('viewCheckoutNote').textContent = coNote || '-';
+        const coImg = document.getElementById('viewCheckoutPhoto');
+        if (coPhoto) { coImg.src = coPhoto; coImg.style.display = 'block'; } else { coImg.style.display = 'none'; }
+
+        openModal('modalViewCondition');
+    }
+
+    document.getElementById('modalViewCondition')?.addEventListener('click', function(e) {
+        if (e.target === this) closeModal('modalViewCondition');
+    });
+
 </script>
 @endpush
 
