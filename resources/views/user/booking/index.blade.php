@@ -455,20 +455,31 @@
     const nowHour  = {{ date('G') }};
     const todayStr = '{{ date('Y-m-d') }}';
 
+    // ------------------------------------------------------------
+    // PERBAIKAN: fungsi ini sekarang MENYIMPAN nilai yang sedang
+    // terpilih sebelum me-reset dropdown, lalu MENGEMBALIKANNYA
+    // setelah proses filter jam selesai. Sebelumnya, nilai yang
+    // sudah dipilih (baik dari data booking lama saat edit, maupun
+    // dari pilihan manual user) selalu terhapus karena innerHTML
+    // di-reset ke markup asli yang tidak menyimpan status "selected".
+    // ------------------------------------------------------------
     function updateDisabledHours(dateEl, startEl, endEl) {
 
         const isToday = dateEl.value === todayStr;
 
-        // Simpan semua option sekali saja
+        // Simpan semua option asli sekali saja
         if (!startEl.dataset.original) {
             startEl.dataset.original = startEl.innerHTML;
         }
-
         if (!endEl.dataset.original) {
             endEl.dataset.original = endEl.innerHTML;
         }
 
-        // Reset dropdown
+        // Simpan nilai yang sedang terpilih SEBELUM di-reset
+        const prevStartValue = startEl.value;
+        const prevEndValue   = endEl.value;
+
+        // Reset dropdown ke markup asli
         startEl.innerHTML = startEl.dataset.original;
         endEl.innerHTML   = endEl.dataset.original;
 
@@ -476,16 +487,17 @@
         // FILTER JAM MULAI
         // ==========================
         Array.from(startEl.options).forEach(opt => {
-
             const h = parseInt(opt.value);
-
             if (isNaN(h)) return;
-
             if (isToday && h <= nowHour) {
                 opt.remove();
             }
-
         });
+
+        // Kembalikan nilai jam mulai yang sebelumnya terpilih (jika opsinya masih ada)
+        if (prevStartValue && Array.from(startEl.options).some(o => o.value === prevStartValue)) {
+            startEl.value = prevStartValue;
+        }
 
         // ==========================
         // FILTER JAM SELESAI
@@ -493,50 +505,31 @@
         const startHour = parseInt(startEl.value);
 
         Array.from(endEl.options).forEach(opt => {
-
             const h = parseInt(opt.value);
-
             if (isNaN(h)) return;
-
             if (
                 h <= startHour ||
                 (isToday && h <= nowHour + 1)
             ) {
                 opt.remove();
             }
-
         });
 
+        // Kembalikan nilai jam selesai yang sebelumnya terpilih (jika opsinya masih ada)
+        if (prevEndValue && Array.from(endEl.options).some(o => o.value === prevEndValue)) {
+            endEl.value = prevEndValue;
+        }
     }
 
     const btnOpen   = document.getElementById('btnOpenModal');
     const btnClose  = document.getElementById('btnCloseModal');
     const btnCancel = document.getElementById('btnCancelModal');
     const newDate   = document.getElementById('new_date');
-    const newStart  = document.getElementById('new_start_time');
-    const newEnd    = document.getElementById('new_end_time');
-
-    // btnOpen.addEventListener('click', () => {
-    //     openModal('modalBooking');
-    //     updateDisabledHours(newDate, newStart, newEnd);
-    // });
-    // btnClose.addEventListener('click',  () => closeModal('modalBooking'));
-    // btnCancel.addEventListener('click', () => closeModal('modalBooking'));
-    // document.getElementById('modalBooking').addEventListener('click', function(e) {
-    //     if (e.target === this) closeModal('modalBooking');
-    // });
-    // newDate.addEventListener('change',  () => updateDisabledHours(newDate, newStart, newEnd));
-    // newStart.addEventListener('change', () => updateDisabledHours(newDate, newStart, newEnd));
-
-    console.log({
-        btnOpen,
-        btnClose,
-        btnCancel,
-        newDate,
-        newStart,
-        newEnd,
-        modalBooking: document.getElementById('modalBooking')
-    });
+    // PERBAIKAN: ID sebelumnya 'new_start_time'/'new_end_time' tidak pernah
+    // ada di HTML (ID asli adalah 'start_time'/'end_time'), sehingga fitur
+    // auto-disable jam lampau di modal "Booking Baru" tidak pernah berjalan.
+    const newStart  = document.getElementById('start_time');
+    const newEnd    = document.getElementById('end_time');
 
     btnOpen?.addEventListener('click', () => {
         openModal('modalBooking');
@@ -565,18 +558,16 @@
     const editEnd   = document.getElementById('edit_end_time');
 
     function openEditModal(id, assetId, date, startTime, endTime) {
-        console.log('EDIT DIKLIK');
         // Isi form
         document.getElementById('formEdit').action = '/user/booking/update/' + id;
         document.getElementById('edit_asset_id').value = assetId;
         document.getElementById('edit_date').value     = date;
 
-        // Set jam mulai
+        // Set jam mulai & jam selesai
         Array.from(editStart.options).forEach(opt => {
             opt.selected = opt.value === startTime;
         });
-        // Set jam selesai
-        Array.from(editEnd.options).forEach(opt => { 
+        Array.from(editEnd.options).forEach(opt => {
             opt.selected = opt.value === endTime;
         });
 
@@ -584,25 +575,7 @@
         updateDisabledHours(editDate, editStart, editEnd);
     }
 
-    // document.getElementById('btnCloseEdit').addEventListener('click',  () => closeModal('modalEdit'));
-    // document.getElementById('btnCancelEdit').addEventListener('click', () => closeModal('modalEdit'));
-    // document.getElementById('modalEdit').addEventListener('click', function(e) {
-    //     if (e.target === this) closeModal('modalEdit');
-    // });
-    // editDate.addEventListener('change',  () => updateDisabledHours(editDate, editStart, editEnd));
-    // editStart.addEventListener('change', () => updateDisabledHours(editDate, editStart, editEnd));
-
-    console.log({
-        editDate,
-        editStart,
-        editEnd,
-        btnCloseEdit: document.getElementById('btnCloseEdit'),
-        btnCancelEdit: document.getElementById('btnCancelEdit'),
-        modalEdit: document.getElementById('modalEdit')
-    });
-
     document.getElementById('btnCloseEdit')?.addEventListener('click', () => closeModal('modalEdit'));
-
     document.getElementById('btnCancelEdit')?.addEventListener('click', () => closeModal('modalEdit'));
 
     document.getElementById('modalEdit')?.addEventListener('click', function(e) {
@@ -610,7 +583,6 @@
     });
 
     editDate?.addEventListener('change', () => updateDisabledHours(editDate, editStart, editEnd));
-
     editStart?.addEventListener('change', () => updateDisabledHours(editDate, editStart, editEnd));
 
     @if($errors->any() && session('_edit_mode'))
