@@ -1,6 +1,7 @@
 /* ============================================================
    USER/DASHBOARD.CSS
    Khusus: resources/views/user/dashboard.blade.php
+   & resources/views/admin/dashboard.blade.php
    ============================================================ */
 
 /* ---- Toolbar Filter ---- */
@@ -108,45 +109,55 @@
 /* ---- Schedule Table ---- */
 .schedule-table {
     width: 100%;
-    border-collapse: collapse;
-    min-width: 860px;
+    border-collapse: separate;
+    border-spacing: 6px;
+    min-width: 900px;
     font-size: var(--font-size-sm);
 }
 
 .schedule-table thead th {
     background-color: var(--color-primary-400);
     color: #ffffff;
-    padding: 11px 14px;
-    font-size: var(--font-size-xs);
+    padding: 14px 16px;
+    font-size: var(--font-size-sm);
     font-weight: 600;
-    letter-spacing: 0.03em;
-    border-bottom: none;
+    letter-spacing: 0.02em;
+    border-radius: var(--radius-md);
     white-space: nowrap;
+    text-align: center;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    filter: none !important;
 }
 
 .schedule-table thead th.asset-name-col {
     background-color: var(--color-primary-700);
-    min-width: 180px;
+    min-width: 200px;
+    text-align: left;
 }
 
-.schedule-table tbody .asset-name-col {
-    background-color: var(--color-primary-50);
-    color: var(--color-primary-700);
-    font-weight: 600;
-    font-size: var(--font-size-sm);
-    padding: 10px 14px;
-    white-space: nowrap;
-}
-
-.schedule-table td {
+.schedule-table tbody td {
+    background-color: #ffffff;
     border: 1px solid var(--color-gray-100);
-    padding: 8px 10px;
+    border-radius: var(--radius-md);
+    padding: 14px 12px;
     text-align: center;
     vertical-align: middle;
 }
 
+.schedule-table tbody .asset-name-col {
+    background: var(--color-gray-50);
+    border: 1px solid #E7EFF3;
+    border-radius: 14px;
+    color: #1B6A78;
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    white-space: nowrap;
+    text-align: left;
+}
+
 .schedule-table tbody tr:hover td { background-color: var(--color-gray-50); }
-.schedule-table tbody tr:hover .asset-name-col { background-color: var(--color-primary-100); }
+.schedule-table tbody tr:hover .asset-name-col { background-color: var(--color-primary-50); }
 
 /* ---- Time Slot ---- */
 .time-slot { background-color: #ffffff; transition: background-color 0.15s ease; }

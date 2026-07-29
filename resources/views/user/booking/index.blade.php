@@ -187,7 +187,7 @@
                     <label>Jam Mulai</label>
                     <select name="start_time" id="start_time" required>
                         <option value="" selected>-</option>
-                        @for($i = 8; $i <= 18; $i++)
+                        @for($i = 8; $i <= 16; $i++)
                             <option value="{{ sprintf('%02d:00', $i) }}">
                                 {{ sprintf('%02d:00', $i) }}
                             </option>
@@ -198,7 +198,7 @@
                     <label>Jam Selesai</label>
                     <select name="end_time" id="end_time" required>
                         <option value="" selected>-</option>
-                        @for($i = 9; $i <= 19; $i++)
+                        @for($i = 9; $i <= 17; $i++)
                             <option value="{{ sprintf('%02d:00', $i) }}">
                                 {{ sprintf('%02d:00', $i) }}
                             </option>
