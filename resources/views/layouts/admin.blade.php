@@ -22,7 +22,7 @@
     <aside class="sidebar" id="sidebar">
 
         <a href="/admin/dashboard" class="sidebar-brand" style="text-decoration:none;">
-            <i class="bi bi-shield-check" style="font-size:22px; color:rgba(255,255,255,0.90);"></i>
+            <img src="{{ asset('images/logo-icon.png') }}" alt="Logo" class="sidebar-brand-icon-img">
             <div>
                 <div class="sidebar-brand-text">Peminjaman Aset</div>
                 <div class="sidebar-brand-sub">Panel Admin</div>

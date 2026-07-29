@@ -1,16 +1,188 @@
-.auth-card {
-    max-width: 450px;
-    margin: 80px auto;
-    padding: 40px;
+/* ============================================================
+   REGISTER.CSS
+   Layout sama seperti login.css (auth-layout, auth-visual, dst).
+   Kalau nanti mau di-refactor, bagian .auth-* bisa dipindah ke
+   satu file bersama (misal css/user/auth.css) supaya tidak dobel.
+   ============================================================ */
+
+body { margin: 0; background: #ffffff; }
+
+.auth-layout {
+    display: flex;
+    min-height: 100vh;
 }
 
-.auth-title {
+/* ---- Panel Visual (kiri) ---- */
+.auth-visual {
+    position: relative;
+    flex: 1.15;
+    overflow: hidden;
+    background: linear-gradient(160deg, var(--color-primary-700), var(--color-primary-900));
+}
+
+.auth-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: authSlideFade 20s infinite;
+}
+.auth-slide:nth-child(1) { animation-delay: 0s; }
+.auth-slide:nth-child(2) { animation-delay: 5s; }
+.auth-slide:nth-child(3) { animation-delay: 10s; }
+.auth-slide:nth-child(4) { animation-delay: 15s; }
+
+.auth-slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.08);
+    filter: brightness(0.55) saturate(1.05);
+}
+
+.auth-slide-brand .auth-slide-bg {
+    background: linear-gradient(160deg, var(--color-primary-600), var(--color-primary-900));
+    filter: none;
+}
+
+.auth-slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+        rgba(13,63,71,0.10) 0%,
+        rgba(13,63,71,0.20) 45%,
+        rgba(13,63,71,0.92) 100%);
+}
+
+.auth-slide-caption {
+    position: absolute;
+    left: 0; right: 0; bottom: 64px;
+    padding: 0 56px;
+    color: #ffffff;
+    z-index: 2;
+}
+
+.auth-slide-tag {
+    display: inline-block;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.16);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 12px;
+}
+
+.auth-slide-caption p {
+    color: rgba(255,255,255,0.92);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.55;
+    max-width: 420px;
+    margin: 0;
+}
+
+.auth-brand-logo-img {
+    height: 34px;
+    margin-bottom: 16px;
+    display: block;
+}
+
+@keyframes authSlideFade {
+    0%   { opacity: 0; }
+    3%   { opacity: 1; }
+    17%  { opacity: 1; }
+    20%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* ---- Panel Form (kanan) ---- */
+.auth-form-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+    background: #ffffff;
+    overflow-y: auto;
+}
+
+.auth-form-box {
+    width: 100%;
+    max-width: 380px;
+    padding: var(--space-lg) 0;
+}
+
+.auth-form-header {
     text-align: center;
-    color: #2696a2;
-    margin-bottom: 30px;
+    margin-bottom: var(--space-lg);
 }
 
-/* Supaya form tidak mepet */
-.auth-card form {
-    margin-top: 10px;
+.auth-form-icon {
+    font-size: 34px;
+    color: var(--color-primary-400);
+    margin-bottom: var(--space-sm);
+    display: block;
+}
+
+.auth-form-title {
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.auth-form-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    margin: 0;
+}
+
+.auth-submit-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--space-sm);
+}
+
+.auth-switch-text {
+    text-align: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    margin-top: var(--space-md);
+}
+.auth-switch-text a { font-weight: 600; }
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+    .auth-visual { display: none; }
+    .auth-form-panel { padding: var(--space-lg); }
+}
+
+.auth-slide-brand-content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+    padding: 0 56px;
+    text-align: center;
+}
+
+.auth-slide-brand-logo {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.auth-slide-brand-content p {
+    color: rgba(255,255,255,0.92);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.55;
+    max-width: 420px;
+    margin: 0;
 }

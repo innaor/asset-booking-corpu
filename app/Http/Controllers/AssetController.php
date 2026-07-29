@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -32,8 +33,15 @@ class AssetController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'subcategory_id' => 'required'
+            'name' => [
+                'required',
+                Rule::unique('assets')->where(function ($query) use ($request) {
+                    return $query->where('subcategory_id', $request->subcategory_id);
+                }),
+            ],
+            'subcategory_id' => 'required',
+        ], [
+            'name.unique' => 'Aset dengan nama ini sudah ada di subkategori yang dipilih.',
         ]);
 
         Asset::create([
@@ -48,8 +56,15 @@ class AssetController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
-            'subcategory_id' => 'required'
+            'name' => [
+                'required',
+                Rule::unique('assets')->where(function ($query) use ($request) {
+                    return $query->where('subcategory_id', $request->subcategory_id);
+                })->ignore($id),
+            ],
+            'subcategory_id' => 'required',
+        ], [
+            'name.unique' => 'Aset dengan nama ini sudah ada di subkategori yang dipilih.',
         ]);
 
         $asset = Asset::findOrFail($id);
@@ -87,7 +102,14 @@ class AssetController extends Controller
     {
         $request->validate([
             'category_id' => 'required',
-            'subcategory_name' => 'required'
+            'subcategory_name' => [
+                'required',
+                Rule::unique('subcategories')->where(function ($query) use ($request) {
+                    return $query->where('category_id', $request->category_id);
+                }),
+            ],
+        ], [
+            'subcategory_name.unique' => 'Subkategori dengan nama ini sudah ada di kategori yang dipilih.',
         ]);
 
         Subcategory::create([

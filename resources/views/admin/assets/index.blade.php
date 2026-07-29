@@ -152,9 +152,12 @@
                 <div style="display:flex; align-items:flex-start; gap:8px;">
                     <i class="bi bi-exclamation-circle-fill" style="flex-shrink:0; margin-top:2px;"></i>
                     <div>
-                        @foreach($errors->all() as $error)
-                            <p style="margin:0 0 4px;">{{ $error }}</p>
-                        @endforeach
+                        @if($errors->has('name'))
+                            <p style="margin:0 0 4px;">{{ $errors->first('name') }}</p>
+                        @endif
+                        @if($errors->has('subcategory_id'))
+                            <p style="margin:0 0 4px;">{{ $errors->first('subcategory_id') }}</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -387,7 +390,7 @@
 </div>
 
 {{-- ===================================================
-     MODAL: TAMBAH SUBKATEGORI
+     MODAL: TAMBAH JENIS ASET
      =================================================== --}}
 <div class="modal-overlay" id="modalSub" role="dialog" aria-modal="true" aria-labelledby="modalSubTitle">
     <div class="modal-box" style="max-width:440px;">
@@ -405,6 +408,22 @@
             </button>
         </div>
 
+        @if($errors->hasAny(['category_id', 'subcategory_name']))
+            <div class="alert alert-danger" style="margin-bottom:var(--space-md);">
+                <div style="display:flex; align-items:flex-start; gap:8px;">
+                    <i class="bi bi-exclamation-circle-fill" style="flex-shrink:0; margin-top:2px;"></i>
+                    <div>
+                        @if($errors->has('category_id'))
+                            <p style="margin:0 0 4px;">{{ $errors->first('category_id') }}</p>
+                        @endif
+                        @if($errors->has('subcategory_name'))
+                            <p style="margin:0 0 4px;">{{ $errors->first('subcategory_name') }}</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <form method="POST" action="/admin/subcategories/store">
             @csrf
 
@@ -413,7 +432,7 @@
                 <select name="category_id" id="category_sub" required>
                     <option value="">— Pilih Kategori —</option>
                     @foreach($categories as $category)
-                        <option value="{{ $category->id }}">
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                             {{ $category->category_name }}
                         </option>
                     @endforeach
@@ -423,6 +442,7 @@
             <div class="form-group">
                 <label for="subcategory_name">Jenis Aset</label>
                 <input type="text" name="subcategory_name" id="subcategory_name"
+                       value="{{ old('subcategory_name') }}"
                        placeholder="Contoh: Laptop"
                        required>
             </div>
@@ -463,7 +483,7 @@
         if (e.target === this) closeModal('modalAset');
     });
 
-    // ---- Modal Subkategori ----
+    // ---- Modal Jenis Aset ----
     document.getElementById('btnOpenSubModal').addEventListener('click',  () => openModal('modalSub'));
     document.getElementById('btnCloseSubModal').addEventListener('click', () => closeModal('modalSub'));
     document.getElementById('btnCancelSubModal').addEventListener('click',() => closeModal('modalSub'));
@@ -479,8 +499,10 @@
         }
     });
 
-    // ---- Buka modal otomatis jika ada error ----
-    @if($errors->any())
+    // ---- Buka modal otomatis sesuai jenis error ----
+    @if($errors->hasAny(['category_id', 'subcategory_name']))
+        openModal('modalSub');
+    @elseif($errors->any())
         openModal('modalAset');
     @endif
 

@@ -648,3 +648,52 @@ table tbody tr:hover { background-color: var(--color-gray-50); }
     .modal-box { border-radius: var(--radius-lg) var(--radius-lg) 0 0; max-height: 92vh; padding: var(--space-md); }
     .modal-footer .btn { flex: 1; justify-content: center; }
 }
+
+/* ========== LOGO ICON (pengganti bootstrap icon) ========== */
+.sidebar-brand-icon-img {
+    width: 22px !important;
+    height: 22px !important;
+    max-width: 22px;
+    max-height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.auth-form-icon-img {
+    width: 40px !important;
+    height: 40px !important;
+    max-width: 40px;
+    max-height: 40px;
+    object-fit: contain;
+    margin: 0 auto var(--space-sm);
+    display: block;
+}
+
+/* .auth-slide-brand-logo-wrap {
+    position: absolute;
+    top: 8%;
+    left: 56px;
+    right: 56px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.auth-slide-brand-logo {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.auth-slide-brand-logo {
+    max-width: 340px;
+    width: 100%;
+    height: auto;   /* biarkan tinggi menyesuaikan otomatis, jangan di-set angka tetap */
+
+
+/* .auth-slide-brand .auth-slide-bg {
+    background: linear-gradient(160deg, var(--color-primary-600), var(--color-primary-900));
+    filter: none;
+} */

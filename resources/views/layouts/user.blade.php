@@ -24,7 +24,7 @@
 
         {{-- Brand --}}
         <a href="/user/dashboard" class="sidebar-brand" style="text-decoration:none;">
-            <i class="bi bi-box-seam" style="font-size:22px; color:rgba(255,255,255,0.90);"></i>
+            <img src="{{ asset('images/logo-icon.png') }}" alt="Logo" class="sidebar-brand-icon-img">
             <div>
                 <div class="sidebar-brand-text">Peminjaman Aset</div>
                 <div class="sidebar-brand-sub">Manajemen Booking</div>
