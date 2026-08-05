@@ -21,8 +21,11 @@
             <div class="auth-slide-bg"></div>
             <div class="auth-slide-overlay"></div>
 
-            <div class="auth-slide-brand-content">
+            <div class="auth-slide-brand-logo-wrap">
                 <img src="{{ asset('images/logo-white-corpu.png') }}" alt="Telkom Corpu" class="auth-slide-brand-logo">
+            </div>
+
+            <div class="auth-slide-caption">
                 <p>Kelola peminjaman aset kantor dengan mudah, cepat, dan transparan — kapan saja Anda butuhkan.</p>
             </div>
         </div>

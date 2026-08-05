@@ -89,6 +89,7 @@
                     <th>Nama Peminjam</th>
                     <th>Kontak</th>
                     <th>Aset</th>
+                    <th>Kepentingan</th>
                     <th>Tanggal</th>
                     <th>Jam</th>
                     <th>Status</th>
@@ -106,6 +107,7 @@
                     <td style="font-weight:500;">{{ $booking->user->name ?? $booking->guest_name }}</td>
                     <td style="color:var(--color-gray-600);">{{ $booking->user->phone ?? $booking->guest_phone }}</td>
                     <td>{{ $booking->asset->name }}</td>
+                    <td style="max-width:200px;">{{ $booking->kepentingan ?? '-' }}</td>
                     <td>{{ \Carbon\Carbon::parse($booking->date)->format('d/m/Y') }}</td>
                     <td>
                         <span style="font-family:monospace; font-size:13px;">
@@ -115,10 +117,15 @@
 
                     {{-- Status --}}
                     <td>
-                        @if(in_array($booking->status, ['ongoing', 'completed']))
-                            {{-- Status ongoing/completed TIDAK BISA diubah manual, hanya lewat check-in/check-out --}}
+                        @if(in_array($booking->status, ['approved', 'ongoing', 'completed']))
+                            {{-- Status approved/ongoing/completed TIDAK BISA diubah manual --}}
                             <div class="booking-status booking-status-{{ $booking->status }} booking-status-static">
-                                <span>{{ $booking->status == 'ongoing' ? 'On Going' : 'Completed' }}</span>
+                                <span>
+                                    @if($booking->status == 'approved') Approved
+                                    @elseif($booking->status == 'ongoing') On Going
+                                    @else Completed
+                                    @endif
+                                </span>
                             </div>
                         @else
                             <form method="POST" action="/admin/booking/update-status/{{ $booking->id }}">
@@ -128,7 +135,6 @@
                                             onchange="updateStatusColor(this); this.form.submit();">
                                         <option value="pending" {{ $booking->status=='pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="approved" {{ $booking->status=='approved' ? 'selected' : '' }}>Approved</option>
-                                        <option value="rejected" {{ $booking->status=='rejected' ? 'selected' : '' }}>Rejected</option>
                                         <option value="cancelled" {{ $booking->status=='cancelled' ? 'selected' : '' }}>Cancelled</option>
                                     </select>
                                 </div>
@@ -166,21 +172,23 @@
                                 </button>
                             @endif
 
-                            <button class="btn-icon btn-icon-danger" title="Hapus booking"
-                                    onclick="confirmDeleteAdmin(
-                                        '{{ route('booking.destroy', $booking->id) }}',
-                                        '{{ $booking->user->name ?? $booking->guest_name }}',
-                                        '{{ $booking->asset->name }}',
-                                        '{{ \Carbon\Carbon::parse($booking->date)->format('d/m/Y') }}'
-                                    )">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                            @if($booking->status == 'pending')
+                                <button class="btn-icon btn-icon-danger" title="Hapus booking"
+                                        onclick="confirmDeleteAdmin(
+                                            '{{ route('booking.destroy', $booking->id) }}',
+                                            '{{ $booking->user->name ?? $booking->guest_name }}',
+                                            '{{ $booking->asset->name }}',
+                                            '{{ \Carbon\Carbon::parse($booking->date)->format('d/m/Y') }}'
+                                        )">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            @endif
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" style="text-align:center; padding:var(--space-xl); color:var(--color-gray-400);">
+                    <td colspan="8" style="text-align:center; padding:var(--space-xl); color:var(--color-gray-400);">
                         <i class="bi bi-calendar-x" style="font-size:32px; display:block; margin-bottom:8px;"></i>
                         Belum ada data booking.
                     </td>

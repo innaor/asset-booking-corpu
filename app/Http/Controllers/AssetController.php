@@ -41,7 +41,7 @@ class AssetController extends Controller
             ],
             'subcategory_id' => 'required',
         ], [
-            'name.unique' => 'Aset dengan nama ini sudah ada di subkategori yang dipilih.',
+            'name.unique' => 'Aset dengan nama ini sudah ada di Jenis Aset yang dipilih.',
         ]);
 
         Asset::create([
@@ -109,7 +109,7 @@ class AssetController extends Controller
                 }),
             ],
         ], [
-            'subcategory_name.unique' => 'Subkategori dengan nama ini sudah ada di kategori yang dipilih.',
+            'subcategory_name.unique' => 'Jenis Aset dengan nama ini sudah ada di kategori yang dipilih.',
         ]);
 
         Subcategory::create([
@@ -117,7 +117,7 @@ class AssetController extends Controller
             'subcategory_name' => $request->subcategory_name
         ]);
 
-        return back()->with('success', 'Subkategori berhasil ditambahkan');
+        return back()->with('success', 'Jenis Aset berhasil ditambahkan');
     }
 
 }

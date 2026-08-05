@@ -24,6 +24,7 @@ class BookingController extends Controller
             'date'       => 'required|date',
             'start_time' => 'required',
             'end_time'   => 'required',
+            'kepentingan' => 'required|string|max:225',
         ]);
 
         $now       = Carbon::now();
@@ -64,6 +65,7 @@ class BookingController extends Controller
             'start_time' => $request->start_time,
             'end_time'   => $request->end_time,
             'status'     => 'pending',
+            'kepentingan' => $request->kepentingan,
         ]);
 
         return redirect('/user/dashboard')->with('booking_success', 'Booking Anda berhasil diajukan! Silakan tunggu konfirmasi dari admin.');
@@ -106,6 +108,7 @@ class BookingController extends Controller
             'date'       => 'required|date',
             'start_time' => 'required',
             'end_time'   => 'required',
+            'kepentingan'  => 'required|string|max:255',
         ]);
 
         $now       = Carbon::now();
@@ -146,6 +149,7 @@ class BookingController extends Controller
             'date'       => $request->date,
             'start_time' => $request->start_time,
             'end_time'   => $request->end_time,
+            'kepentingan' => $request->kepentingan,
         ]);
 
         return redirect('/user/booking')->with('edit_success', 'Booking berhasil diperbarui.');

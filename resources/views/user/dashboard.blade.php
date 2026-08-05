@@ -105,6 +105,10 @@
 
                     <td class="{{ $slotClass }}" @if($colspan > 1) colspan="{{ $colspan }}" @endif>
                         @if($booking)
+                            <div class="slot-booking-info">
+                                {{ $booking->kepentingan ?? 'Tidak ada keterangan' }}
+                                oleh {{ $booking->user->name ?? $booking->guest_name }}
+                            </div>
                             <div class="slot-time">
                                 {{ date('H:i', strtotime($booking->start_time)) }}–{{ date('H:i', strtotime($booking->end_time)) }}
                             </div>
@@ -181,6 +185,13 @@
                        value="{{ old('date') }}"
                        min="{{ date('Y-m-d') }}"
                        required>
+            </div>
+            
+            <div class="form-group">
+                <label for="kepentingan">Kepentingan</label>
+                <textarea name="kepentingan" id="kepentingan" rows="2"
+                        placeholder="Contoh: Rapat internal divisi TI"
+                        required>{{ old('kepentingan') }}</textarea>
             </div>
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-md);">

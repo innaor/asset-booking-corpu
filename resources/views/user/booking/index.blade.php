@@ -25,6 +25,7 @@
                     <th>Nama Aset</th>
                     <th>Tanggal</th>
                     <th>Jam Peminjaman</th>
+                    <th>Kepentingan</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -41,6 +42,7 @@
                             {{ date('H:i', strtotime($item->end_time)) }}
                         </span>
                     </td>
+                    <td>{{ $item->kepentingan ?? '-' }}</td>
                     <td>
                         @php
                             $badgeClass = match($item->status) {
@@ -67,7 +69,8 @@
                                             '{{ $item->asset_id }}',
                                             '{{ $item->date }}',
                                             '{{ substr($item->start_time, 0, 8) }}',
-                                            '{{ substr($item->end_time, 0, 8) }}'
+                                            '{{ substr($item->end_time, 0, 8) }}',
+                                            `{{ $item->kepentingan }}`
                                         )">
                                     <i class="bi bi-pencil"></i>
                                 </button>
@@ -117,7 +120,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" style="text-align:center; padding:var(--space-xl); color:var(--color-gray-400);">
+                    <td colspan="6" style="text-align:center; padding:var(--space-xl); color:var(--color-gray-400);">
                         <i class="bi bi-calendar-x" style="font-size:32px; display:block; margin-bottom:8px;"></i>
                         Belum ada booking.
                         <a href="#" onclick="document.getElementById('btnOpenModal').click(); return false;">
@@ -181,6 +184,12 @@
                 <label>Tanggal Peminjaman</label>
                 <input type="date" name="date" id="new_date"
                        value="{{ old('date') }}" min="{{ date('Y-m-d') }}" required>
+            </div>
+            <div class="form-group">
+                <label>Kepentingan</label>
+                <textarea name="kepentingan" id="new_kepentingan" rows="2"
+                        placeholder="Contoh: Rapat internal divisi TI"
+                        required>{{ old('kepentingan') }}</textarea>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-md);">
                 <div class="form-group">
@@ -266,6 +275,11 @@
                 <label>Tanggal Peminjaman</label>
                 <input type="date" name="date" id="edit_date"
                        min="{{ date('Y-m-d') }}" required>
+            </div>
+            <div class="form-group">
+                <label>Kepentingan</label>
+                <textarea name="kepentingan" id="edit_kepentingan" rows="2"
+                        placeholder="Contoh: Rapat internal divisi TI" required></textarea>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-md);">
                 <div class="form-group">
@@ -557,11 +571,12 @@
     const editStart = document.getElementById('edit_start_time');
     const editEnd   = document.getElementById('edit_end_time');
 
-    function openEditModal(id, assetId, date, startTime, endTime) {
+    function openEditModal(id, assetId, date, startTime, endTime, kepentingan) {
         // Isi form
         document.getElementById('formEdit').action = '/user/booking/update/' + id;
         document.getElementById('edit_asset_id').value = assetId;
         document.getElementById('edit_date').value     = date;
+        document.getElementById('edit_kepentingan').value = kepentingan;   
 
         // Set jam mulai & jam selesai
         Array.from(editStart.options).forEach(opt => {

@@ -17,6 +17,7 @@ class Booking extends Model
         'guest_name',
         'guest_phone',
         'guest_document',
+        'kepentingan', 
         'date',
         'start_time',
         'end_time',

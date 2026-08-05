@@ -117,9 +117,12 @@
                         }
                     @endphp
 
-                    <td class="{{ $slotClass }}"
-                        @if($colspan > 1) colspan="{{ $colspan }}" @endif>
+                    <td class="{{ $slotClass }}" @if($colspan > 1) colspan="{{ $colspan }}" @endif>
                         @if($booking)
+                            <div class="slot-booking-info">
+                                {{ $booking->kepentingan ?? 'Tidak ada keterangan' }}
+                                oleh {{ $booking->user->name ?? $booking->guest_name }}
+                            </div>
                             <div class="slot-time">
                                 {{ date('H:i', strtotime($booking->start_time)) }}–{{ date('H:i', strtotime($booking->end_time)) }}
                             </div>
