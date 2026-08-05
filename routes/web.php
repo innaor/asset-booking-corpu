@@ -41,7 +41,7 @@ Route::middleware(['admin'])->group(function () {
                        ->get();
 
         $bookings = Booking::where('date', $date)
-                           ->whereIn('status', ['pending', 'approved', 'ongoing'])
+                           ->whereIn('status', ['pending', 'approved', 'ongoing', 'completed'])
                            ->get();
 
         $categories = Category::all();                  // ← tambahan untuk filter kategori
